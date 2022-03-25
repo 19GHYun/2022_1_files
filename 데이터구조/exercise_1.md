@@ -32,7 +32,7 @@ else
 객체 : 정수의 범위들. 전화 번호부 같은 배열. Person[0] ~ Person[MAX_Number]
 
 ```
-참고할 것.
+참고하면 좋을 것!
 
 Person에서 쓰인 구조체는
 
