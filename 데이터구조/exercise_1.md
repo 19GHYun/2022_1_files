@@ -13,16 +13,78 @@ else
   
 ### 4. Set(집합) 추상 자료형을 정의하라. 다음과 같은 연산자들을 포함시켜라.
 
-객체 : 정수의 범위들.
+객체 : 정수의 범위들. 전화 번호부 같은 배열. Person[0] ~ Person[MAX_Number]
+Person.name
 
-Set Create ::= 
-Set Create ::= 
-Set Create ::= 
-Set Create ::= 
-Set Create ::= 
-Set Create ::= 
-Set Create ::= 
+Person.number
 
+Person.age
+
+-------
+
+Set Create(x) ::= Person Person[x] // 여기서 이 내용은 각각 name, number, age에 자료를 넣는 구조체임.
+      
+                  return 0
+
+Set Insert(x) ::= if( Person[x] != "NULL") { Person[x+1] = Person[x] , Create[x] } //단 x가 Max_number면 안될 것.
+                    
+                    else Create(x)
+                    
+Set Remove(x) ::= Person(x) == "NULL"
+
+Set Is_In(x) ::=  if( Person[x] != "NULL") { printf("x번에는 자료가 있습니다.");}
+
+                  else printf("x번에는 자료가 없습니다");
+
+Set intersection(x,y) ::= if(person[x].name == person[y].name)
+
+                      printf(person[x].name);
+                      
+                   if(person[x].number == person[y].number)
+
+                      printf(person[y].number);
+                      
+                   if(person[x].age == person[y].age)
+
+                      printf(person[y].age);
+                      
+                      //교집합의 뜻을, 두 자료가 같으면 출력하게 해 보았음.
+
+Set Union(x,y) ::= if(person[x].name == person[y].name)
+
+                      printf(person[x].name)
+                      
+                   else
+                   
+                       printf(person[x].name + \n + person[y].name
+                       
+                   if(person[x].number == person[y].number)
+
+                      printf(person[x].number)
+                      
+                   else
+                   
+                       printf(person[x].number + \n + person[y].number
+                       
+                   if(person[x].age == person[y].age)
+
+                      printf(person[x].age)
+                      
+                   else
+                   
+                       printf(person[x].age + \n + person[y].age
+                       
+                   // 합집합이라 두 내용을 다 출력 해 보았고, 단, 같은 내용이면 한번만 출력되게 함.
+
+Set Difference(x,y) ::= if(person[x] == person[y])
+
+                      printf("두 자료의 내용이 같습니다.")
+                      
+                      else
+                        
+                         printf("두 자료의 내용이 다릅니다.")
+                      
+                  
 
 ### 6. 다음과 같은 코드의 시간 복잡도는? 여기서 n이 프로그램의 입력이라고 가정하자.
 
@@ -50,7 +112,7 @@ n이 커지면 결국 n2에 비례하게 커지므로 답은,
 
 간단하게 n2에 1넣으면 1, 2 넣으면 4가 나오니까.. 답은 4배로 증가한다.
 
-3번
+3번 (4배)
 
 ### 12.다음의 빅오표기법들을 수행시간이 적게 걸리는 것부터 나열하라.
 
