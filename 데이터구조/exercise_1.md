@@ -14,11 +14,21 @@ else
 ### 4. Set(집합) 추상 자료형을 정의하라. 다음과 같은 연산자들을 포함시켜라.
 
 객체 : 정수의 범위들. 전화 번호부 같은 배열. Person[0] ~ Person[MAX_Number]
+
+```
+참고할 것.
+
+Person에서 쓰인 구조체는
+
 Person.name
 
 Person.number
 
 Person.age
+
+를 가진다.
+
+```
 
 -------
 ```
