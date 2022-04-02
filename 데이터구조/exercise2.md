@@ -103,7 +103,49 @@ Answer. 우선 이 함수를 보면 asterisk가 호출 될 때 * 이 한번 출�
 
 -------
 
-### 13.
+### 13. 다음을 계산하는 순환적인 프로그램을 작성하시오.
+```
+int sum( int n)
+{
+  if( n == 1) return 1;
+  else return ( n + sum((n-1) );
+}
+```
+
+### 15. 순환 호출되는 것을 이해하기 위하여 fib함수를 다음과 같이 바꾸어서 실행하여 보라. fib(6)을 호출할 때 화면에 출력되는 내용을 쓰시오.
+```
+int fib(int n)
+{
+  printf("fib(%d) is called\n", n);
+  if( n == 0 ) return 0;
+  if( n == 1 ) return 1;
+  return (fib(n-1) + fib(n-2));
+}
+```
+
+fib라는 함수는 호출될때 fib(n) is called가 출력이 됨.(n이 0 또는 1이 아닐 경우)
+
+fib(6)은 fib(5) + fib(4)가 되며, fib(5)는 fib(4)+fib(3)이 됨.
+
+계산을 하면 2fib(4) + fib(3)가 되고, 2fib(4)는 2( fib(3) + fib(2)) 가 된다.
+
+또 계산을 하면 3fib(3) + 2fib(2)가 되고, 3fib(3)은 3 ( fib(2) + 1 ) 이 된다.
+
+또 또 계산을 하면 5fib(2) + 3이 되며, 계산을 하면 5 ( fib(1) + fib(0) ) + 3이며, fib(1)은 1 fib(0)은 0이므로, 5 + 3 = 8이된다.
+
+하지만 이것은 마지막에 출력되는 반환값 이고, 화면에 출력되는 것은 printf 부분이므로, 
+
+<u>fib(6)실행</u> -> fib(6) -> fib(5) + fib(4), fib(5) 실행 -> fib(4) + fib(3) + fib(4) fib(4) 실행 fib(3) + fib(2) + fib(3) + fib(4)
+
+fib(3)실행 -> fib(2) + fib(1) + fib(2) + fib(3) + fib(4), fib(2)실행 -> fib(1) + fib(0) + fib(1) + fib(2) + fib(3) + fib(4)
+
+fib(1) 실행 -> return 1/ fib(0) + fib(1) + fib(2) + fib(3) + fib(4), fib(0)실행 -> return 0 / fib(1) + fib(2) + fib(3) + fib(4).
+
+fib(1) 실행 -> return 1/ fib(2) + fib(3) + fib(4). fib(2)실행 -> fib(1) + fib(0) + fib(3) + fib(4).
+
+fib(1) 실행 후 fib(0) 실행. -> fib(3) + fib(4)
+
+fib(3) 실행 fib(2) + fib(1) + fib(4) . fib(2) 실행 fib(1) + fib(0) + fib(1) + fib(4). fib(1), fib(0) 실행.
 
 
 
