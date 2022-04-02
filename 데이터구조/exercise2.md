@@ -64,9 +64,14 @@ int recursive (int n)
 
 Answer. 역시 화면에 출력되는 것은 printf("%d\n", n); 이다.
 ```
-
+//는 반환값 계산임. 화면에 출력이 되지 않음.
+10  //1+recursive(7)    2 + 1 = 3 = recursive(10)
+7   //1+recursive(4)    1 + 1 = 2 = recursive(7)
+4   //1+recursive(1)    1 + 0 = 1 = recursive(4)
+1   //1+recursive(-2)   1 + -1 = 0 = recursive(1)
+-2  //-1                -1
 ```
-
+이렇게 출력이 되며, 반환값은 3이다.
 
 
 
