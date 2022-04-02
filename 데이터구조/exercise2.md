@@ -15,10 +15,14 @@
 ### 5. 다음의 순환호출 함수에서 잘못된 점은 무엇인가?
 
 ```
-
 int recursive(int n)
 {
   if( n==1 ) return 0;
   return n*recursive(n);
 }
 ```
+
+Answer. 이 경우 n이 1이 아닐 시, n * recursive(n)이 무한으로 호출이 된다.
+
+해결을 한다면, n * recursive(n-1); 이런식으로 바뀌면 된다.
+
