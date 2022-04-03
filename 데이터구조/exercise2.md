@@ -4,10 +4,12 @@
 
 ### 원판이 5개인 하노이의 탑.
 
-코드
+**코드**
+
 ![image](https://user-images.githubusercontent.com/94778099/161407323-0b6d88ef-b17e-4f66-aae5-aee11c48e413.png)
 
-실행결과
+**실행결과**
+
 ![image](https://user-images.githubusercontent.com/94778099/161407331-9735d381-0dd3-4002-906b-e3a03939ee0d.png)
 
 
