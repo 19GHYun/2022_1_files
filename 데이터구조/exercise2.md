@@ -1,6 +1,15 @@
 ## exercise 2
 
-**20194546 윤경호**
+**조선대학교 컴퓨터공학과 20194546 윤경호**
+
+### 원판이 5개인 하노이의 탑.
+
+코드
+![image](https://user-images.githubusercontent.com/94778099/161407323-0b6d88ef-b17e-4f66-aae5-aee11c48e413.png)
+
+실행결과
+![image](https://user-images.githubusercontent.com/94778099/161407331-9735d381-0dd3-4002-906b-e3a03939ee0d.png)
+
 
 ### 1. 팩토리얼을 계산하는 순환호출 함수 factorial에서 매개 변수로 5를 주었다면 최대 몇 개의 factorial 함수의 활성 레코드가 동시에 존재할 수 있는가?
 
