@@ -235,6 +235,80 @@ int main()
 }
 ```
 
+### 19. 본문의 순환적인 피보나치 수열 프로그램과 반복적인 피보나치 수열 프로그램의 수행 시간을 측정하여 비교하라. 어떤 결론을 내릴 수 있는가?
+
+순환적인 피보나치 수열의 수식은 T(n) = T(n-1) + T(n-2) + C 인데, 풀어보면 시간복잡도는 O(2의n제곱)이 나온다.(책 참고 하였읍니다)
+
+반복적인 피보나치 수열을 보자.
+```
+int fib_iter(int n)
+{
+  if ( n == 0 ) return 0;    //1
+  if ( n == 1 ) return 1;    //2
+        
+  int pp = 0;                //3
+  int p = 0;                 //4
+  int result == 0;           //5
+  
+  for(int i = 2; i <= n; i++){  //6
+    result = p + pp;            //7
+    pp = p;                     //8
+    p = result;                 //9
+   }
+   return result;               //10
+}
+```
+
+1부터 5행 까지는 일반적인 상수시간 C가 걸린다. 6행을 보면 for문에 일반적으로 i가 1씩 오르는 구조이다. for문 안에 7 8 9행은 일반적인 상수시간C를 가진다.
+
+그러므로 for문은 일반적으로 1씩 오르는 구조이므로, n이 엄청 커지게 되면 n에 수렴하는 시간복잡도를 가진다.
+
+그 결과 시간복잡도는 O(n)이다.
+
+결론적으로 순환은 O(2의n제곱) 반복은 O(n)이므로, 시간 효율성은 반복적인 피보나치 수열 프로그램이 더 좋다. 
+
+
+### 21. 컴퓨터 그래픽에서의 영역 채우기 알고리즘은 순환 기법을 사용한다. 영역 채우기란 다음과 같은 흰색 영역이 있을 때 이 영역을 특정한 색으로 채우는 것이다. 여기서는 이 영역 안쪽을 검정색으로 채운다고 가정해보라. 이런 경우에는 순환 호출을 어떻게 사용할 수 있을까? 2차원 배열이 다음과 같이 되어 있다고 가정하고 영역안의 한 점의 좌표가 주어졌을 경우에 안쪽을 채우는 순환호출 함수를 작성하여 보라. 그림[2-16]의 x로 표시된 픽셀이 시작 픽셀이다.
+
+![image](https://user-images.githubusercontent.com/94778099/161406856-2dfd2975-f4f4-4e7f-a26a-9776e1b55925.png)
+
+```
+#define WHITE 0
+#define BLACK 1
+#define YELLOW 2
+
+int screen[WIDTH][HEIGHT];
+//
+char read_pixel(int x, int y)
+{
+  return screen[x][y];
+}
+//
+void write_pixel(int x, int y, int color)
+{
+  screen[x][y] = color;
+}
+// 영역 채우기 알고리즘
+
+void flood_fill(int x, int y)
+{
+  if (read_pixle(x, y) == WHITE)
+  {
+     write_pixel(x, y, BLACK);
+     if(x+1 < 10)           //임의의 x 지점에서 상하좌우를 호출한다면, 순환으로 인해 호출된것에 상하좌우.. 계속 반복하면 전 범위가 됨.(시행 횟수는 많아 지겠지만...)
+        flood_fill(x+1, y); //2차원 배열이 [0][0] 부터 [9][9]까지므로 그 값을 넘길경우 호출 안하게 if문을 검.
+     if(x-1 > -1
+        flood_fill(x-1, y);
+     if(y+1 < 10)
+        flood_fill(x, y+1); 
+     if(y-1 > -1
+        flood_fill(x, y-1
+   }
+}
+```
+
+
+
 
 
 
