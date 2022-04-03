@@ -174,6 +174,66 @@ fib(1) 실행 후 fib(0)실행하고 마무리.
 
 가 된다.
 
+### 17. 이항계수(binomial coefficient)를 계산하는 순환함수를 작성하라. 이항계수는 다음과 같이 순환적으로 정의된다. 반복함수로도 구현해보라.
+
+![image](https://user-images.githubusercontent.com/94778099/161406116-f9ea963c-30d3-42c4-93c1-dcc5c4658af7.png)
+
+```
+순환함수
+#include <stdio.h>
+
+int sum = 0;  //전역변수. 이항계수의 값을 구하기 위해 넣었음.
+
+int bc(int n, int k)
+{
+  if( 0 < k < n )
+    return (bc(n-1, k-1) + bc(n-1, k));
+  
+  else if( k == 0 || k == n ){
+    return sum++;   //원래 1이 반환되어야 하지만, sum에 1을 더해서 값을 구하였음.
+    }
+}
+
+int main() {
+    bc(5, 3);    //예시. 이항계수 5c3을 구해보았음.
+    printf("%d", sum);  //출력결과 10
+    return 0;
+}
+```
+```
+반복함수
+#include <stdio.h>
+
+int fbc(int n, int k){
+
+  if(k == 0 || k == n){
+    //return 1; // 1이 반환 되는데 시각적으로 표현하고 싶어서 바로 아랫줄 처럼 리턴 받아 보았읍니다.
+    return printf("1");
+  }
+  else if( n < 1 || k < 0 || n < k){
+    return printf("잘못된 값");  // 이항계수에서 k가 n보다 크거나, n이 1보다 작거나, k가 0보다 작으면 안되므로 제한사항을 걸었읍니다.
+  }
+  else{
+    int high = 1;   //분자의 값 입니다.
+    int low = 1;    //분모의 값 입니다,
+    int total = 0;  //결과값 입니다.
+    for(int i = n ; i > n-k ; i--){
+      high = high * i;    //5C3의 경우, 공식은 분자가 5*4*3이고 분모는 3*2*1로 되는 공식이므로 for문을 사용하였습니다.
+  }
+    for(int i = k ; i > 0 ; i--){
+      low = low * i;      //5C3의 경우, 공식은 분자가 5*4*3이고 분모는 3*2*1로 되는 공식이므로 for문을 사용하였습니다.
+    }
+  total = high / low;     //분자 / 분모 입니다.
+  return printf("%d", total);   
+    }
+}
+
+int main()
+{
+  fbc(5, 3);      //결과값은 10이 나옵니다.
+  return 0;
+}
+```
 
 
 
