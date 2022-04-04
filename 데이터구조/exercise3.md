@@ -155,7 +155,7 @@ int main() {
   }
  
   while(1){
-    getchar();
+    getchar();    //입력버퍼 제거
     printf("검색할려는 사람 이름을 적어주세요. 프로그램 종료는 exit.\n");
     scanf("%s", char2);
     if(strcmp(char2, "exit") == 0){
@@ -169,6 +169,6 @@ int main() {
 }
 ```
 
-실행결과
+실행결과. 실행환경 우분투 컴파일러
 
 ![image](https://user-images.githubusercontent.com/94778099/161542450-273f3098-eb4c-4a7b-acbe-edc3de917c42.png)
