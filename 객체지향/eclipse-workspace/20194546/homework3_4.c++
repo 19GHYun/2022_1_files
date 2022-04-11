@@ -107,7 +107,17 @@ public:
 };
 
 // 위에 코드는 수정 불가
+MyStack::MyStack(int size){
+	this->size = size;
+	element = new string[size];
+}
 
+MyStack::MyStack(MyStack& s){
+	this->size = s.size;
+	this->tos = s.tos;
+	this->element = new string;
+	strcpy(this->element, s.element);
+}
 //여기에 코드 작성
 //아래 main 함수 실행시 출력과 입력 예시
 /*
