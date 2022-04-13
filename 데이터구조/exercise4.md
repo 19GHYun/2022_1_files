@@ -92,7 +92,7 @@ int main(void)
 해결하지 못하였음.
 
 
-### 
+### 2번
 ```
 #include <stdio.h>
 #include <stdlib.h>
