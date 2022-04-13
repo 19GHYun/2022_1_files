@@ -8,70 +8,88 @@
 
 typedef int element;
 typedef struct {
-  element *data;
-  int capacity;
-  int top;
+    element* data;
+    int capacity;
+    int top;
 } StackType;
 
-void init_stack(StackType *s)
+void init_stack(StackType* s)
 {
-  s->top = -1;
-  s->capacity = 1;
-  s->data = (element *)malloc(s->capacity * sizeof(element));
+    s->top = -1;
+    s->capacity = 1;
+    s->data = (element*)malloc(s->capacity * sizeof(element));
 }
 
-int is_empty(StackType *s)
+int is_empty(StackType* s)
 {
-  return (s->top == -1);
+    return (s->top == -1);
 }
 
-int is_full(StackType *s)
+int is_full(StackType* s)
 {
-  return (s->top == (s->capacity -1));
+    return (s->top == (s->capacity - 1));
 }
 
-void push(StackType *s, element item)
+void push(StackType* s, element item)
 {
-  if (is_full(s)){
-    s->capacity *= 2;
-    s->data = (element *)realloc(s->data, s->capacity * sizeof(element));
-  }
-  s->data[++(s->top)] = item;
+    if (is_full(s)) {
+        s->capacity *= 2;
+        s->data = (element*)realloc(s->data, s->capacity * sizeof(element));
+    }
+    s->data[++(s->top)] = item;
 }
 
-element pop(StackType *s)
+/*
+void push(StackType s, element item)
 {
-  if(is_empty(s)){
-    fprintf(stderr, "스택 공백 에러\n");
-    exit(1);
-  }
-  else return s->data[(s->top)--];
+    if (s.top == (s.capacity - 1)) {
+        s.capacity *= 2;
+        s.data = (element*)realloc(s.data, s.capacity * sizeof(element));
+    }
+     s.data[++(s.top)] = item;
+}
+*/
+
+element pop(StackType* s)
+{
+    if (is_empty(s)) {
+        fprintf(stderr, "스택 공백 에러\n");
+        //exit(1);
+    }
+    else return s->data[(s->top)--];
 }
 
 int main(void)
 {
-  StackType *s;
-  init_stack(&s);
-  /*
-  push(&s, 1);
-  push(&s, 2);
-  push(&s, 3);
-  printf("%d \n", pop(&s));
-  printf("%d \n", pop(&s));
-  printf("%d \n", pop(&s));
-  free(s.data);
-  */
-  push(&s, 1);
-  push(&s, 2);
-  push(&s, 3);
-  printf("%d \n", pop(&s));
-  printf("%d \n", pop(&s));
-  printf("%d \n", pop(&s));
-  free(s.data);
-  return 0;
+    StackType* s;
+    s = &s;
+    s->top = -1;
+    s->capacity = 1;
+    s->data = (element*)malloc(s->capacity * sizeof(element));
+    /*
+    push(&s, 1);
+    push(&s, 2);
+    push(&s, 3);
+    printf("%d \n", pop(&s));
+    printf("%d \n", pop(&s));
+    printf("%d \n", pop(&s));
+    free(s.data);
+    */
+    push(s, 5);
+    push(s, 8);
+    push(s, 2);
+    printf("%d \n", pop(&s));
+    printf("%d \n", pop(&s));
+    printf("%d \n", pop(&s));
+    printf("%d \n", pop(&s));
+    free(s->data);
+    return 0;
 }
 ```
+실행결과
+![image](https://user-images.githubusercontent.com/94778099/163189805-93d689b0-e1f2-44ff-983d-4934cc1a406e.png)
 
+해결하지 못하였음.
 
 
 ### 
@@ -167,6 +185,7 @@ int main(void) {
 ```
 코드실행결과
 ![4-2 사진](https://user-images.githubusercontent.com/94778099/163178449-786a7a16-9bd9-4596-af46-c494427f4401.PNG)
+(결과는 괄호검사실패)
 
 코드 실행 순서(사진)
 ![데이터 구조 4-2](https://user-images.githubusercontent.com/94778099/163178600-25b1ff73-a89a-42cd-b170-3d6d33a089c6.png)
@@ -283,3 +302,6 @@ int main(void)
 
 코드 실행 결과
 ![image](https://user-images.githubusercontent.com/94778099/163178332-846f1ce6-d669-4eaf-9bbe-83fd3ca31702.png)
+
+코드 실행 순서(사진)
+![데이터구조 4-3](https://user-images.githubusercontent.com/94778099/163182095-188a33e9-c016-4337-8fff-4da092a85c38.jpg)
