@@ -1,6 +1,6 @@
 ## 데이터 구조 4장 과제 20194546윤경호
 
-###1
+### 1
 ```
 #include <stdio.h>
 #include <stdlib.h>
