@@ -44,3 +44,4 @@
 ![image](https://user-images.githubusercontent.com/94778099/158767340-4828f9b4-acce-451e-98c5-950e3eba81f2.png)
 
 
+[20194546_윤경호_컴퓨터적사고_1차과제.docx](https://github.com/19GHYun/2022_1_files/files/8506938/20194546_._._1.docx)
