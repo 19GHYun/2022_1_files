@@ -222,6 +222,7 @@ int* ArrayUtility2::concat(int s1[], int s2[], int size_s1, int size_s2){
 
 int* ArrayUtility2::remove(int s1[], int s2[], int size_s1, int size_s2, int&retSize){
 	int check = 0;
+	int check2 = size_s1;
 
 	int *array2 = new int [size_s1];
 
@@ -229,19 +230,21 @@ int* ArrayUtility2::remove(int s1[], int s2[], int size_s1, int size_s2, int&ret
 			array2[i] = s1[i];
 		}
 
-	for(int i = 0; i <size_s1; i++){
+	for(int i = 0; i < size_s1; i++){
 		for(int j = 0; j < size_s2; j++){
 			if(array2[i] == s2[j]){
-				array2[i] == NULL;
+				for(int k = i; k < size_s1; k++){
+					array2[k] = array2[k+1];
+				}
+				array2[size_s1 - 1] = '\0';
+				size_s1--;
 				check++;
+				i--;
 			}
 		}
 	}
-	for(int i = 0; i < size_s1; i++){
-		if(array2[i] == NULL){
-			array2[i+1] = array2[i];
-		}
-	}
+	retSize = check2 - check;
+
 	return array2;
 }
 //여기에 코드 작성
@@ -303,3 +306,4 @@ int main() {
     delete [] y;
 
 }
+
