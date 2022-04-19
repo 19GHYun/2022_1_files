@@ -45,3 +45,13 @@
 
 
 [20194546_윤경호_컴퓨터적사고_1차과제.docx](https://github.com/19GHYun/2022_1_files/files/8506938/20194546_._._1.docx)
+
+
+
+
+
+[20194546_._._123123.docx](https://github.com/19GHYun/2022_1_files/files/8510223/20194546_._._123123.docx)
+
+
+
+
