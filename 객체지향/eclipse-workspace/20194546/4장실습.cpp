@@ -72,3 +72,60 @@ int main() {
 	cout << "문자 a는 " << count << "개 있습니다.";
 }
 */
+
+
+
+
+/*
+class Sample {
+	int* p;
+	int size;
+public:
+	Sample(int n) {
+		size = n; p = new int[n];
+	}
+	void read();
+	void write();
+	int big();
+	~Sample();
+};
+
+void Sample::read() {
+
+	int a[10];
+	cin >> a[0] >> a[1] >> a[2] >> a[3] >> a[4] >> a[5] >> a[6] >> a[7] >> a[8] >> a[9];
+
+	for (int i = 0; i < 10; i++) {
+		p[i] = a[i];
+	}
+
+}
+void Sample::write() {
+	for (int i = 0; i < 10; i++) {
+		cout << p[i] << " ";
+	}
+	cout << endl;
+}
+int Sample::big() {
+	int big1 = 0;
+
+	for (int i = 0; i < 10; i++) {
+		if (big1 < p[i]) {
+			big1 = p[i];
+		}
+	}
+	return big1;
+}
+Sample :: ~Sample() {
+	delete[] p;
+}
+int main() {
+	Sample s(10);
+	s.read();
+	s.write();
+	cout << "가장 큰 수는 " << s.big() << endl;
+
+}
+
+
+*/
