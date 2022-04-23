@@ -53,3 +53,22 @@ int main() {
 
 
 */
+
+/*
+
+int main() {
+	
+	string a;
+	int index = 0;
+	int count = 0;
+	cout << "문자열 입력>>";
+	cin >> a;
+
+	for (int i = 0; i<a.length(); i++) {
+		if (index = a.find("a", index))
+			count++;
+	}
+
+	cout << "문자 a는 " << count << "개 있습니다.";
+}
+*/
