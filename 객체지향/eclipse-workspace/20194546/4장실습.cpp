@@ -31,3 +31,25 @@ int main() {
 }
 
 */
+
+/*
+#include <iostream>
+using namespace std;
+
+
+int main() {
+	
+	int *a = new int[5];
+
+	cout << "정수 5개 입력>>";
+	cin >> a[0] >> a[1] >>  a[2] >>  a[3] >> a[4];
+
+	cout << "평균 " << (float)(a[0] + a[1] + a[2] + a[3] + a[4]) / 5 << endl;
+
+	delete[] a;
+
+}
+
+
+
+*/
