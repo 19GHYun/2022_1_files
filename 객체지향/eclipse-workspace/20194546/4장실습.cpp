@@ -129,3 +129,52 @@ int main() {
 
 
 */
+
+/*
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+
+int main() {
+
+	string a;
+	
+	cout << "아래에 한 줄을 입력하세요.(exit를 입력하면 종료합니다)" << endl;
+
+	while (1) {
+		
+
+		getline(cin, a);
+
+		if (a == "exit") {
+			break;
+		}
+
+		int length = a.length();
+
+		srand((unsigned)time(0));
+		int n = rand();
+
+		int random = rand() % length;
+
+		while (1) {
+			if (a[random] == ' ') {
+				random++;
+			}
+			else
+				break;
+		}
+
+
+		a[random] = n % 26 + 97;
+
+		cout << a << endl;
+
+	}
+
+}
+*/
