@@ -178,3 +178,36 @@ int main() {
 
 }
 */
+
+
+/*
+#include <iostream>
+#include <string>
+
+
+using namespace std;
+
+
+int main() {
+
+	string a;
+	cout << "아래에 한 줄을 입력하세요.(exit를 입력하면 종료합니다)" << endl;
+
+	while (1) {
+
+		getline(cin, a);
+
+		if (a == "exit") {
+			break;
+		}
+
+		int length = a.length();
+
+		for (int i = length - 1; i > -1; i--) {
+			cout << a[i];
+		}
+		cout << endl;
+
+	}
+}
+*/
