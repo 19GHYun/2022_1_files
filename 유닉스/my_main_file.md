@@ -159,7 +159,7 @@ cp
   char buf[SZ_FILE_BUF];
   struct stat st_buf;
   
-  if((stat(원본파일이름, &st_buf) < 0 ))||
+  if((stat(원본파일이름, &st_buf) < 0 ))||  // &st_buf에 밑줄 긋고 여기에 들어갈 건? 주소 넘기는거 제대로 체크 ㄱ
     ((rfd = open(원본파일 이름, O_RDONLY)) < 0 ))
     에러 출력 후 리턴.
   if((wfd = creat(복사된 파일 이름, st_buf.st_mode)) < 0 ){
@@ -182,16 +182,71 @@ while((len = read(rfd, buf, SZ_FILE_BUF)) ..
 -> buf에 읽어놓고, wfd에 buf에 읽은걸 쓴다.
 즉 cp f1 f2 라면, f1 -> buf ->f2 의 순으로 복사가 된다.
 
+wfd = creat(복사된이름, st_buf.st_mode)) -> 원본파일 접근권한은 st_buf.st_mode에 잇음.
+
+-> stat(원본파일, &st_buf) <에서 st_buf.st_mode에 들어옴.
 
 
 
+###open함수.
+대충.. open(
+
+oflag -> O_RDONLY : read-only-로 open or create.
+          O_WRONLY : write-only 로 open or create.
+          O_RDWR
+          O_APPEND
+          O_CREAT
+          O_EXCL
+          O_TRUNC
+          define으로 정의된 정수값들임.이렇게 7개가 잘 쓰임. 자료 참고.
+ex) open(pathname , O_RDONLY);
+->읽기모드로 열고, 파일 없으면 에러 - 파일열기
+
+open(pathname, O_WRONLY | O_CREAT| O_TRUNC , mode); 
+  ->쓰기모드(O_WRONLY)로 열고, 파일 없으면 생성(O_CREAT), 있으면 파일 내용 삭제 후 파일크기를 0(O_TRUNC)으로 설정. - 저장하기.
+  
+open(path, O_WRONLY | O_CREAT | O_EXCL, mode);
+  ->쓰기모드(O_WRONLY)로 열고, 파일 없으면 생성(O_CREAT), 있으면 에러(O_EXCL) : (새 이름으로 저장하기)
+  
+open(pathname, O_WRONLY | O_CREAT | O_APPEND, mode);
+  ->파일 끝에 덧붙이기 모드로 열고, 파일 없으면 새로 생성 : (로그 파일 열기)
+
+open(pathname, O_RDWR);
+  -> 읽고/쓰기 모드(O_RDWR)로 열고, 파일 없으면 에러.
+  
+open(pathname, O_RDWR | O_CREAT, mode);
+  ->읽고 쓰기모드(O_RDWR)로 열고, 파일 없으면 생성(O_CREAT)
+  DB파일 또는 기존 파일을 읽고 쓰고자 할 경우.
 
 
+### creat 함수
 
+write only로만 열림. -> 0644
 
+-> 사실 open(pathname, O_WRONLY | O_CREAT | O_TRUNC, mode); 과 같은 기능임.
 
+### lseek함수.
 
+off_t lseek(int filedes, off_t offset, int whence);
+->리턴은 옮겨간 위치 값.
 
+int filedes -> 파일 핸들 값.
+
+whence에 들어가는거 -> seek_set - file offset이 file시작(0)위치부터 offset.
+                    seek_cur - file offset이 현재 position값 + offset.
+                    seek_end - file offset이 파일 크키(파일의 마지막 바이트 다음 위치) + offset. offset은 음수 가능.
+
+파일 끝 위치 찾는법 -> seek_end 선언 offset 0주면 리턴은 파일의 끝임.
+
+배열 a[0], a[1] 있으면 맨 끝은 a[2]. 리턴은 2가 됨.
+
+ex -> lseek(STDIN_FILENO, 600, seek_set)
+
+-> 하면 600이 리턴이 될 것임.
+
+read(rfd, buf, SZ_FILE_BUF))
+↑
+이때의 위치 주솟값 &st를, buf 대신에 넣음.
 
 
 
