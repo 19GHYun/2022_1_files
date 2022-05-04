@@ -62,12 +62,82 @@ A는 if(errno != ENOENT) B는 if((fd = creat(?,?)) < 0).
 
 
 
+### cat 함수
 
+```
+void cat
+  fd와 len를 int 형 변수로 선언
+  buf[SZ_FILE_BUF]사이즈 char형 선언
+  
+  if((fd = open(파일이름 , O_RDONLY))<0 ) 이면
+    에러원인 출력 후 리턴.
+  while((len = read(fd, buf, SZ_FILE_BUF)) > 0 ) {
+    if(write ( STDOUT_FILENO, buf, len) != len) {
+      len = -1;
+      break;
+    }
+  }
+  
+  if( len < 0 )
+    perror(cmd);
+  close(fd);
+```
 
+여기서 쓰이는 read write open close 은 유닉스 API 함수를 이용한 것임. (따로 헤더파일 이런거 필요 없는듯 함.)
 
+->한번에 다이렉트로 불러오니까 속도면에서 빠를수도 있다. 
 
+C++ 함수를 쓰면 unix API함수 쓰는거임. 유닉스 API함수 없이 지들끼리 못쓴다고 생각.
 
+read -> SZ_FILE_BUF 만큼 읽어서 buf라는 주소에 저장
 
+파일을 읽을때
+ㅁ        ㅁ       ㅁ       ㅁ
+1024 kb  1024kb   1024kb   100kb
 
+이렇게 읽게 되는데, 여기서 1024kb는 SZ_FILE_BUF크기와 같음
 
+일반적으로 8kb씩 읽는게 효율이 조타!
 
+------
+
+len = read... 에서 len은 실제로 읽어진 갯수가 리턴이 됨.ㅣ
+
+write(STDOUT_FILENO(화면) , buf , len)
+화면에다가 가져다가 쓰는데 buf에다가 len만큼 작성을 함. 
+리턴값은 실제 쓴 갯수가 됨.
+
+read write 의 맨 앞에 값은 핸들값이라고 함. fd랑 STDOUT_FILENO->화면 을 뜻함.
+
+------
+
+perror(cmd) 왜 PRINT_ERR_RET를 안쓰는가?
+
+->PRINT.. 이건 리턴을 해버리기 때문임. 에러가 떠도 파일은 닫아줘야 하므로 에러 원인만 출력하고 파일을 닫음.
+
+------
+
+ㅁ -> 1024kb라고 했음.
+len = read(...)에서 1024만큼 읽게 됨. len에 1024리턴.
+
+read -> 1024만큼 읽음. 이걸 계속 반복함.
+
+파일을 다 읽으면 len에는 0이 리턴이 됨.(에러 생기면 len에 -1 리턴.)
+
+while 비껴가고 if 비껴가고 close 하게 됨. 
+
+------
+
+시험 예상 문제. 파일 크기는 3KB + 100 이고 SZ_FILE_BUF은 1024이다.
+
+몇번 읽고 출력하고, 얼마를 읽을까?
+
+-> 5번 읽혀짐. 그 이유는 1024 1024 1024 100 0. 이렇게 5번 읽혀짐. 0이 읽혀져야 다 읽었다는 것을 알게 됨.
+
+while반복 조건에서 에러가 떠버리면 len에 -1이 리턴. 
+
+while 안 if 구간에서 에러가 나는 법? -> USB 읽고 있는데 USB 뽑아버리기.
+
+------
+
+파일 open 
