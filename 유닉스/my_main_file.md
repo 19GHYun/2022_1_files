@@ -82,6 +82,7 @@ void cat
     perror(cmd);
   close(fd);
 ```
+O_RDONLY -> 
 
 여기서 쓰이는 read write open close 은 유닉스 API 함수를 이용한 것임. (따로 헤더파일 이런거 필요 없는듯 함.)
 
