@@ -159,7 +159,7 @@ cp
   char buf[SZ_FILE_BUF];
   struct stat st_buf;
   
-  if((stat(원본파일이름, &st_buf) < 0 ))
+  if((stat(원본파일이름, &st_buf) < 0 ))||
     ((rfd = open(원본파일 이름, O_RDONLY)) < 0 ))
     에러 출력 후 리턴.
   if((wfd = creat(복사된 파일 이름, st_buf.st_mode)) < 0 ){
