@@ -252,7 +252,7 @@ read(rfd, buf, SZ_FILE_BUF))
 
 r - 디렉토리에 Read Permission만 있으면 누구든 directory 읽기 가능. ls -l
 
-w - 디렉토리에 write Permission 있어야 디렉토리 아래에 있는 파일을 만들거나 생성, 제거 가능. cp rm
+w - 디렉토리에 write/execute Permission 있어야 디렉토리 아래에 있는 파일을 만들거나 생성, 제거 가능. cp rm
 
 x - 디렉토리에 execute 퍼미션 있어야 그 디렉토리를 지나갈 수 있음. /home/a2345678/up/cmd
 
@@ -269,3 +269,105 @@ OS에는 2가지로 나뉨. Kernel과 System Program 을 합친게 운영체제�
 가장 많이 잡아먹는게 앞에 2개임. 허허
 
 아무튼 이런것들이 함수 집합으로 존재하는걸 통틀어서 Kernel이라고 한다.
+
+ls 사용 예시.
+
+ls
+ls-l
+ls ../pr4
+ls -l ../pr4
+
+ls -l -a // 옵션에러
+ls ../jhshim //디렉토리 없음 에러
+ls /home/jhshim //접근권한 에러
+ls a b c // 인자 개수 에러
+
+ls 함수(대략적으로 한줄씩 설명)
+```
+char *path;
+DIR *dp; //디렉토리 핸들(디렉토리도 하나의 특별한 파일이다.)
+
+//디렉토리 이름을 안줬으면 현재 디렉토리 설정. path -> "."
+path = (argc == 0 ) ? "." : argv[0];
+//ls 또는 ls -l인 경우 argc = 0, ls ../up 또는 ls -l ../up인 경우 argc = 1
+//ls 또는 ls -l이면 path -> "."
+//ls ../up 또는 ls -l ../up 인 경우 path -> "../up"
+
+if((dp = opendir(path)) == NULL) // 디렉토리 열기.
+  PRINT_ERR_RET();  // 존재하지 않는 디렉토리면 file not found 출력. //읽을수 없으면 permission denyed 뭐 이런식으로..
+//예)ls 또는 ls ../up인 경우 optc = 0, ls -l 또는 ls -l ../up인 경우 optc = 1
+
+if(optc == 0 )
+  print_name(dp);
+else
+  print_detail(dp, path); // -l 상세출력.
+  
+closedir(dp);
+
+```
+
+```
+
+static void print_name(DIR *dp);
+{ //디렉토리의 모든 파일에 대해 이름만 출력하기.
+  struct dirent *dirp;
+  int max_name_len, num_per_line, cnt = 0;
+  //max_name_len : 가장 긴 파일이름 길이 +4(이름 뒤 여유공간)
+  //num_per_line: 한 줄에 출력할 수 있는 총 파일 이름 개수.
+  get_max_name_len(dp, &max_name_len, &num_per_line);
+  
+  while((dirp = readdir(dp)) != NULL ) {
+    printf("%-*s", max_name_len, dirp->d_name);
+    //%-*s 는 좌 맞춤임. 한글에서 왼쪽으로 땡겨서 쓰는 그거임. -가 빠지면 우 맞춤이 됨. *대신 20이면  20칸 만큼 좌/우로 넘기는 것임. 근데 이걸 변수로 쓰는데 *은 max_name_len에 맞춰지고 s는 dirp->d_name 에 맞춰짐.
+    
+    if (( ++cnt % num_per_line) == 0 ) // cnt가 num_per_line의 배수이면,
+      printf("\n");
+    //cnt: 현재까지 출력한 파일 개수.
+    //한 줄에 출력할 수 있는 파일 이름의 개수만큼 이미 출력 했으면 줄바꾸기임.
+  }
+  //마지막에 줄 바꾸기 문자 출력함.
+  //단, 앞에서 이미 한 줄에 출력할 수 있는 파일 이름의 개수만큼 이미 출력하여 줄 바꾸기 했으면 또 다시 줄바꾸기 하지 않음.
+  if((cnt % num_per_line) != 0 ) // cnt가 num_per_line의 배수가 아닐때만.
+    printf("\n");
+}
+
+```
+```
+
+static void
+get_max_name_len(Dir *dp, int *p_max_name_len, int *p_num_per_line)
+{
+  struct dirent *dirp;
+  int max_name_len = 0; // 가장 긴 파일이름 길이.
+  
+  //모든 파일 이름을 읽어 내 가장 긴 이름의 길이를 결정함.
+  while((dirp = readdir(dp)) != NULL ) {
+    int name_len = strlen(dirp->d_name);
+    if(name_len > max_name_len)
+      max_name_len = name_len;
+   //파일 이름 길이가 제일 긴거보다 크면 최신화. 파일 끝까지 반복.
+  }
+  rewinddir(dp); //안해주면 큰일남. 꼭 해주기. print_name에서 다시 dp 읽어야해서 리와인드 해줘야함.
+  //가장 긴 파일이름 + 이름 뒤의 여유 공간.
+  max_name_len += 4;
+  //한 줄에 출력 할 파일이름의 개수 결정.
+  *p_num_per_line = 80 / max_name_len;
+  *p_num_name_len = max_name_len;
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
