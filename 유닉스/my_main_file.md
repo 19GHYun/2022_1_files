@@ -356,8 +356,20 @@ get_max_name_len(Dir *dp, int *p_max_name_len, int *p_num_per_line)
 }
 
 ```
+```
+//ls -l처럼 상세정보 출력..
+static void
+print_detail(DIR *dp, char *path)
+{
+  struct dirent *dirp;
+  
+  while((dirp = readdir(dp)) != NULL )
+      print_attr(path, dirp->d_name);
+}
 
 
+```
+print_attr
 
 
 
