@@ -369,7 +369,7 @@ print_detail(DIR *dp, char *path)
 
 
 ```
-print_attr
+print_attr은 강의자료 참고하자
 
 
 
