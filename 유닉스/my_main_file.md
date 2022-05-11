@@ -372,12 +372,70 @@ print_detail(DIR *dp, char *path)
 print_attr은 강의자료 참고하자
 
 
+exit함수.
+exit랑 _exit 있는데 전자꺼를 쓰자.
 
+wait 함수..
 
+### run 함수.
 
+외부 명령어 쓸 수 있게 해준다.ex) gcc, make ,more, vi, man, find....
 
+내부 명령어가 아닌 경우, 원래 있던 "지원되지 않은 명령어 입니다."를 지우고 run_cmd(); 써서 사용함.
 
+```
 
+void
+run_cmd(void)
+{
+    pid_t pid;
+    
+    if( (pid = fork() ) <0 )
+        PRINT_ERR_RET();
+    //프로그램 복제.(cmd가 2개가 되고 동시에 실행됨.)
+    //fork함수에서 부모 자식 둘다 복제가 됐기 때문에 fork가 성공적으로 끝나면 둘다 실행위치는 똑같이 fork 리턴부터 시작함.
+    //리턴값이 0이면 자식이고 0보다 크면 부모다.
+    //부모한테는 pid가 0보다 큰 프로세스 아이디가 발급 됨 자식은 0
+    
+    else if( pid == 0){ //자식 프로세스면..
+        int i, cnt = 0;
+        chat *nargv[100];
+        
+        nargv[cnt++] = cmd;
+        for(i = 0; i < optc ; ++i)  //argc는 개수 argv[]는 포인터배열.
+            nargv[cnt++] = optv[i]; //int main(int argc, char *argv[])가 쓰이는 이유. char* 를 포인터 써서 char* argv[]임. vi에디터에게 char *argv[]를 보내게 됨.
+        for(i = 0; i < optv ; ++i)  //우리가 cmd에서 쓸때 토큰 자르고 앞에서부터 cmd, optv, argv 자른건 전역변수들. 이 것들을 nargv[](새로운거)에넣음.그리고 vi에 전달을 해줌.
+            nargv[cnt++] = argv[i]                        //그래서 포인터에 포인터인듯?
+        nargv[cnt++] = NULL;
+                                    //환경변수... cd 제일 처음에 있는 파일들과, . 랑 .. 임. 환경변수가 있어야 하는 이유가, 우리가 그냥 일반적으로 cmd 치면 cmd 실행 되는 이유가 
+                                    //.가 있어서임. 그래서 vi를 실행할려고 할때 환경변수가 있어서 그곳 어딘가에 있는 vi를 실행시켜준다.PATH..
+                                    
+        if(execvp(cmd, nargv) < 0 ){//execvp호출되고, vi의 메인 함수가 돌기 시작. 자식 프로그램은 사라진다(바꿔치기 했으니까)..
+        perror(cmd); // PRINT_ERR_RET()호출하면 안됨.
+        exit(1);    //왜냐하면 return이 아니라 exit 해야해서 (자식 프로그램이 
+        }
+    }
+    
+    else{ // pid>0인경우. 즉 부모 프로세스.
+        //자식(pid)이 종료될 때까지 대기
+        if(waitpid(pid, NULL, 0) < 0 ) //자식이 죽으면 리턴이 되고, 아래쪽 실행 0이 리턴되면 정상. 0보다 작으면 비정상. NULL 대신 int a 선언하고 &a로 넣으면 종료되고 리턴되는 값을 알 수 있다. 죽은 원인을 알 수 있다.
+            PRINT_ERR_RET();
+        //자식 프로세스가 종료되면 waitpid()는 자식 프로세스의 pid값을 리턴.
+    }
+    //부모가 자식 종료를 기다리지 않으면 자식은 Zombie프로세스가 됨.
+}
+
+```
+
+bash가 cmd를 실행시키고, cmd가 vi를 실행시킴. bash - cmd의 부모, cmd - vi의 부모.
+
+그런데 cmd에서 vi로는 바로 실행을 못시키고 일련의 과정이 있다.
+
+cmd를 복제해서(fork()) 또다른 메모리에 붙여넣기. 내용은 똑같은데, 주소는 다름.
+
+그 복제한 cmd를 vi로 바꿔치기 한다. 바꿔치기 할때 쓰는 함수는 execvp().
+
+사실 배쉬에서 cmd 실행할때도 똑같다.. fork로 복제하고 exec()로 cmd를 실행시킴.
 
 
 
