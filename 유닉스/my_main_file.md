@@ -439,5 +439,81 @@ cmd를 복제해서(fork()) 또다른 메모리에 붙여넣기. 내용은 똑�
 
 
 
+-------------------
 
 
+API의 약자는 어플리케이션 프로그래밍 인터페이스
+
+윈도우에서 API를 유닉스에선 System Call함수 라고 함.
+
+좀비프로세스 관련해서 잘 알고 있어야할듯.
+
+sprintf(buf, "%s %d", "abc",2).. - 메모리에 가져다가 씀. - ls에서 잘 씀.
+
+printf- 화면에 출력. fprintf는 파일에 씀.
+
+sscanf(buf, "%s %d", newbuf, &i).. newbuf에 abc가 들어가고, i에는 2가 들어감.
+
+sscanf도 메모리에서 읽는거고 fscanf는 파일 scanf는 화면..
+
+int sec = atoi(argv[0]) 함수임. Aㅏ스키 문자를 to int형으로 . a to i.. 이것도 더 간단한데,
+
+sscanf(argv[0], "%d", &sec)랑 똑같음.
+
+메인 -> A -> B -> C..
+
+C에서 바로 메인으로 점프가 가능?
+
+
+Set Jump, long Jump 사용하면 가능.
+
+```
+jump_buf jb; //<- 선언해야 하는 변수임. 전역변수인듯?
+
+메인에다가
+
+int jmpret;
+
+jmpret = setjmp(jb);
+if(jmpret != 0) {
+    if(jmpret == -1 )
+        Print error 1;
+    else if(jmpret == -2)
+        Print error 2;
+    }
+ while(1){
+    A();
+    process next...;
+ }
+ 
+ ```
+ 
+ A()가 불리고, A에서 B가 불러지고..
+ 
+ B에 C함수랑 D함수가 있다.
+ 
+ ```
+ 
+ C
+ 
+ if(error)
+  longjmp(jb, -1);
+ 
+ ```
+ 
+ ```
+ D
+ 
+ if(error)
+  longjmp(jb, -2);
+ 
+ ```
+ 
+ 여기서 longjmp가 불리면, 메인에 있는 jmpret = setjmp(jb)에 리턴이 됨. C에선 -1로 리턴.. D에선 -2로 리턴..
+ 
+ 그리고 리턴이 됏으면 에러처리 하고 다시 while문 반복수행 함.
+ 
+ 단 longjmp의 리턴값을 0으로 하면 안됨. 왜냐면 처음 리턴할때 0이 리턴되기 때문.
+ 
+ 
+ 
