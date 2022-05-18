@@ -570,7 +570,7 @@ char *s_to_c = "fifo_s_to_c"
 
 실습 11장 11번 중요. 두 프로그램에 다 있어야 하는 것임.
 
-11장 12번.
+11장 12번. srv1.c 파일 
 
 중요한거.
 
@@ -626,6 +626,92 @@ close(out_fd);
 close(in_fd);
 
 개간단함
+
+11장 15번.
+
+파일에서 큐로 온거. 서버가 읽는 문장임.
+
+len = read(in_fd, cmd_line, SZ_STR_BUF);
+
+cmd_line에 SZ_STR_BUF만큼 읽어라.. in_fd는 헤드
+
+클라이언트를 컨트롤C로 강제 종료 되거나, 정상적으로 종료되면.. 아무튼 프로그램이 죽으면 자동으로 close을 보냄(운영체제가 해줌). 그렇다면 return되는 len은 0.
+
+물론 close되도 리턴은 0.
+
+널 문자를 제외한 문자 갯수가 리턴이 됨. if ABC라면 len은 3 
+
+if(len <= 0 )
+  break;
+  
+cmd_line[len] = '\0'; //받고나서 문자열로 만들어 줘야함.
+
+아래는 큐에서 파일로. 서버가 보내는 문장임.
+
+if(write(out_fd, ret_buf, len) != len)
+    break;
+
+write의 리턴값은 실제로 읽는 길이.
+
+
+
+11장 16번 클라이언트 프로그램.
+
+connect_to_server();
+single_process();
+disconnect();
+....
+
+single_process() 함수.
+    while무한루프
+        if(input_send() < 0 ) break; // 키보드에 읽어서 서버로 보냄.
+        if(recv_output() < 0 ) break; // 서버에서 메시지 받아 화면에 출력한다.
+        
+        
+11장 17번
+
+connect_to_server() 프로그램 -> 서버 연결 함수.
+
+out_fd = open(c_to_s, O_WRONLY); 클라 -> 서버 연결        
+if (out_fd <0) 
+    print_err_exit(c_to_s);
+    
+in_fd = open(s_to_c, O_RDONLY); 서버 -> 클라 연결.
+if(in_fd <0)
+    print_err_exit(s_to_c);
+        
+11장 18번
+
+input_send()함수 프로그램에서 서버로 보내는 것.
+
+len = read(0, cmd_line, SZ_STR_BUF); // 0은 키보드 1은 출력용 2는 에러가 떳을대 출력용. 1 2 는 모니터.
+                                      //SZ_STR_BUF만큼 읽음. cmd_line에 적혀잇는걸. 키보드로 읽는다.
+if(len <= 0) return len; // 컨트롤 Z 누르면 생기는 그런 일..                                      
+
+//아래는 서버로 전송하는 코드.
+if(write(out_fd, cmd_line, len) != len)
+  return -1;
+return len;
+
+recv_output() 함수. 서버에서 프로그램으로 보낸걸 받음.
+
+len = read(in_fd, cmd_line, SZ_STR_BUF);// input_send에서 엔터 치기 전까지 키보드로 입력 하는 중. 또는 보내자 마자 서버가 처리 못했을때 len = read.. 에서 스톱되어 있음.
+if(len <0 ) return len;                 //아무튼 read가 깨어나서 일 하면 리턴이 됨.
+
+if(write(1, cmd_line, len) != len) // 화면에 출력
+  return -1;
+return len;
+
+
+프로그램 죽이면 다른곳도 죽는지 확인하기.
+
+
+
+
+
+
+
+
 
 
 
