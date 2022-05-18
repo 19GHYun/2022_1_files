@@ -516,4 +516,117 @@ if(jmpret != 0) {
  단 longjmp의 리턴값을 0으로 하면 안됨. 왜냐면 처음 리턴할때 0이 리턴되기 때문.
  
  
- 
+-----------
+
+프로그램간 통신.
+
+cmd to server 이랑 server to cmd 의 fifo 파일.
+
+키보드 -> cmd -> fifo_c_to_s큐 -> server ,
+
+server -> fifo_s_to_c큐 -> cmd -> 모니터.
+
+대충 서버에서 프로그램으로 통신 방법.
+
+char *s_to_c = "fifo_s_to_c"
+
+1. 서버에서 open(s_to_c, O_WRONLY)(쓰기용)로 오픈,
+
+2. 동시에 cmd에서 open(s_to_c, O_RDONLY)(읽기용)로 동시에 오픈.
+
+2-1.파일 이름이 같기 때문에 메시지 큐에 닿을수 있다.(포인터라서 그런거도 잇는듯).
+
+3.먼저 호출 되면 먼저 온 사람이 대기상태에 돌입(상대편이 오기 전까지) 운영체제에서 관리하는듯?.
+
+4.그리고 read write 함수를 써서 큐에 정보를 넣고 뺌.
+
+4-0. 서버에서 out_fd = open(s_to_c, O_WRONLY), cmd에서 in_fd = open(s_to_c, O_RDONLY)실행.
+
+4-1.서버에선 write(out_fd, buf, len)이런식으로 씀.-> 큐에 정보가 저장이 됨.
+
+4-2.cmd에선 len = read(in_fd, buf, BUF_SIZE)로 읽어들임.
+
+4-3. out_fd와 in_fd가 0이냐 1이냐에 따라서 키보드에서 읽고 모니터에서 쓰는지, 키보드에서 쓰고 모니터에서 읽는지 할 수 있다. (파일 핸들이 뭐냐에 따라 어디에 쓰고 읽는지 알 수 있다).
+
+5. 통신을 끝낼땐 서버(보내는쪽)에서 close(out_fd)하면, 프로그램에서 read를 하면 0이 리턴이 됨. 이걸로 통신이 끝났다고 인식하고 프로그램에서도 close(in_fd)를 호출함.
+
+그렇다면 프로그램에서 서버로 보낼땐?
+
+0. char* c_to_s = "fifo_c_to_s"
+
+1. 서버에서 in_fd = open(c_to_s, O_RDONLY)호출
+
+2. 프로그램에선 out_fd = open(c_to_s, O_WRONLY)호출.
+
+2-0. 양방향 통신이라면 위에꺼 서버 프로그램 각각 in out 다 호출 해야함.
+
+3. 서버에서 len = read(in_fd, buf, BUF_SIZE) 호출.
+
+4. 프로그램에서 write(out_fd, buf, len) 호출.
+
+5. 서버에서 read(in_fd, BUF_SIZE) 하는데, 프로그램에서 close 호출하면 0이 리턴되서 close이 됨.
+
+6. 프로그램에서 그만 보내고 싶을때 close(out_fd)호출.
+
+실습 11장 11번 중요. 두 프로그램에 다 있어야 하는 것임.
+
+11장 12번.
+
+중요한거.
+
+1.connect_to_clinet() 연결.
+
+2.클라이언트 -> 서버 메세지 수신 문장
+
+3. 서버 -> 클라이언트 메세지 송신 문장.
+
+4.dis_connect() 끊기.
+
+```
+strncmp(cmd_line, "exit", 4) == 0 에 관하여, 
+```
+왜 strcmp 중간에 n이 있는가?. 일단 n은 문자열의 개수까지 비교함. 4가 4개를 뜻함. 
+
+1. exit hahaha 이런식으로 있어도 strcmp면 exit되버림.
+
+2. exit 엔터 까지 넘어갈수 있어서 안될수 있어서... 아무튼 strncmp 써야한다.
+
+
+```
+sprintf(ret_buf, "server: %s", cmd_line); //서버가 프로그램에게 문자열을 보냄.
+```
+
+11장 13번.
+
+13 14번은 서버에서 쓰이는 함수임.
+
+```
+connect_to_client()함수에서..
+
+in_fd = open(c_to_s, O_RDONLY);
+if (in_fd < 0)
+    print_err_exit(c_to_s);         //char *c_to_s = "fifo_c_to_s"
+          ...1
+    
+out_fd = open(s_to_c, O_WRONLY);
+if(out_fd < 0)  // 위에 in_fd<0과 같이 이런 경우는 open이 잘못된 경우라 에러임.
+    print_err_exit(s_to_c);         //char *s_to_c = "fifo_s_to_c"
+          ...2
+```
+
+이건 서버쪽 에서 클라이언트 쪽임. 먼저 호출된 곳은 반대편을 기다림. 클라이언트 프로그램을 실행해서 연결하기 전까지 in_fd = open... 이랑 out_fd = open.. 에서
+
+return을 안하고 있음. 둘다 호출이 다 되어야 리턴이 되서 in_fd에 값이 들어감.
+
+11장 14번.
+
+dis_connect() 함수에서..
+
+close(out_fd);
+close(in_fd);
+
+개간단함
+
+
+
+
